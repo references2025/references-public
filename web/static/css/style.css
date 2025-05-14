@@ -1,0 +1,541 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+US+Trad&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+.container {
+    width: 100%;
+    max-width: 450px; /* Slightly narrower for mobile feel */
+    margin: 0 auto;
+    background-color: #FFFFFF; /* White background for content */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 1px solid #E9ECEF;
+    background-color: #D6F0F4;
+}
+
+
+h1 {
+    font-family: 'Playwrite US Trad', cursive; /* Updated to Playwrite US Trad font */
+    font-size: 2.8rem; /* Larger */
+    margin: 0;
+    color: #495057; /* Slightly muted color */
+    font-weight: normal; /* Decorative fonts often don't need bold */
+}
+
+/* Main Game Area */
+#game-container,
+.success-content,
+.tomorrow-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Word Display */
+#word-display {
+    font-family: 'Montserrat', sans-serif; /* Match body font */
+    font-size: 2rem; /* Larger letters */
+    font-weight: 700; /* Bold */
+    text-align: center;
+    margin: 25px 0;
+    letter-spacing: 0.5em; /* Wide spacing */
+    color: #343A40;
+    text-transform: uppercase; /* UPPERCASE LETTERS */
+    /* border-bottom: 2px solid #CED4DA; Underline */
+    padding-bottom: 10px; /* Space below letters */
+    /* Remove margin if using padding for spacing */
+    line-height: 1.2;
+}
+#word-display::before {
+    display: none;
+}
+
+
+/* Game Status */
+#game-status {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 0 20px 0; /* Space below status */
+    font-size: 0.9rem;
+    color: #6C757D; /* Lighter grey */
+}
+
+.status-item span {
+    font-weight: 700; /* Bold numbers */
+}
+
+/* Guess Input */
+#guess-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#guess-input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #CED4DA;
+    /* border-radius: 4px; */
+    margin-right: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#guess-button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    background-color: #28A745; /* Green button */
+    color: white;
+    border: none;
+    /* border-radius: 4px; */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#guess-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+#guess-button:disabled {
+    background-color: #ADB5BD; /* Greyed out when disabled */
+    cursor: not-allowed;
+}
+
+/* Game Results Feedback */
+#game-results {
+    margin: -10px 0 15px 0; /* Adjust positioning */
+    text-align: center;
+    color: #DC3545; /* Red for errors */
+    font-weight: bold;
+    min-height: 20px; /* Reserve space */
+    font-size: 0.9rem;
+    font-family: 'Montserrat', sans-serif;
+}
+/* Import Instrument Sans font */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap');
+
+/* Hints Section Styling */
+#hints-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between hint boxes */
+    margin: 15px 0;
+    /* font-family: 'Instrument Sans', sans-serif; */
+}
+
+.hint-box {
+    background-color: #F8F9FA; /* Very light grey for unrevealed */
+    border: 1px solid #E9ECEF; /* Subtle border */
+    /* border-radius: 8px; */
+    padding: 20px 15px; /* Taller boxes as shown in mockup */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center; /* Center align all content */
+}
+
+.hint-category {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #495057;
+    margin: 0 auto; /* Center content */
+    font-family: 'Montserrat', sans-serif;
+}
+
+.hint-content {
+    display: none; /* Hidden by default */
+    font-size: 1.35rem; /* Larger as in mockup */
+    font-weight: 550;
+    margin-top: 8px;
+    color: #2b3035;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Revealed hint styling */
+.hint-box.hint-revealed {
+    background-color: #A6D7E8; /* Light blue base color */
+    cursor: default;
+    padding: 15px 15px 25px; /* Adjust padding for revealed state */
+}
+
+/* Create increasingly darker shades for subsequent hints */
+.hint-box.hint-revealed:nth-of-type(1) {
+    background-color: #D6F0F4; /* Lightest blue */
+}
+
+.hint-box.hint-revealed:nth-of-type(2) {
+    background-color: #A6D7E8; /* Light blue */
+}
+
+.hint-box.hint-revealed:nth-of-type(3) {
+    background-color: #7CBFD4; /* Medium blue */
+}
+
+.hint-box.hint-revealed:nth-of-type(4) {
+    background-color: #5CA7C0; /* Darker blue */
+}
+
+.hint-box.hint-revealed .hint-category {
+    font-size: 1.25rem; /* Smaller in revealed state */
+    /* opacity: 0.8; */
+}
+
+.hint-box.hint-revealed .hint-content {
+    display: block; /* Show content when revealed */
+    margin-top: 5px;
+}
+
+/* Loading state */
+.hint-box.hint-loading .hint-content {
+    display: block;
+    font-style: italic;
+    font-weight: normal;
+    color: #6C757D;
+}
+
+/* Success Screen Specific Styles */
+.success-content {
+    background-color: #FFF3CD; /* Light yellow base */
+    /* background-image: radial-gradient(circle, rgba(255, 255, 255, 0.6) 20%, transparent 70%); Radial gradient */
+    background-image: url('/static/css/background.png');
+    /* border-radius: 8px; */
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.success-header {
+    font-family: 'Playwrite US Trad', cursive;
+    font-size: 2.8rem; /* Larger script */
+    color: #495057; /* Orange/brown color */
+    margin-bottom: 10px;
+    font-weight: normal; /* Decorative fonts often don't need bold */
+}
+
+.success-message {
+    font-size: 1.1rem;
+    color: #5C3C00;
+    margin-bottom: 10px;
+}
+
+.success-word {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #5C3C00;
+    margin-bottom: 25px;
+}
+
+/* Tomorrow Screen Specific Styles */
+.tomorrow-content {
+    /* background-color: #E8F0F2; Existing light blue/grey */
+    /* border-radius: 8px; */
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.word-reveal {
+    font-size: 1.8rem;
+    color: #6C757D; /* Grey color */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    border-bottom: 2px solid #ADB5BD; /* Grey underline */
+    padding-bottom: 8px;
+    margin-bottom: 25px;
+    display: inline-block; /* Allow underline to fit content */
+}
+
+.tomorrow-header {
+    font-family: 'Playwrite US Trad', cursive;
+    font-size: 2.8rem;
+    color: #495057;
+    margin-bottom: 10px;
+    font-weight: normal;
+}
+
+.tomorrow-message {
+    font-family:'Instrument Sans', sans-serif;
+    font-size: 1rem;
+    color: #495057;
+    margin-bottom: 25px;
+    padding: 0 10px; /* Prevent text touching edges */
+}
+
+/* Shared Styles for Summary/Buttons on End Screens */
+.summary-title {
+    font-family:'Instrument Sans', sans-serif;
+    font-weight: 700;
+    color: #495057;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    /* text-transform: uppercase; */
+}
+
+.game-id-display {
+    margin-bottom: 15px;
+    color: #6C757D;
+    font-size: 0.9rem;
+}
+
+.share-summary-display {
+    margin: 15px 0;
+    font-size: 1.5rem; /* Larger emojis/checks */
+    line-height: 1;
+    min-height: 30px; /* Ensure space even if empty */
+}
+
+.share-button {
+    width: 100%;
+    padding: 14px; /* Slightly larger buttons */
+    margin: 8px 0;
+    background-color: #28A745; /* Consistent green */
+    color: white;
+    border: none;
+    /* border-radius: 4px; */
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+
+.share-button:hover {
+    background-color: #218838;
+}
+
+.result-inner-container {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    margin: 10px 20px;
+    padding: 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+/* .explanation-button:disabled {
+    background-color: #ADB5BD;
+    cursor: not-allowed;
+}
+ */
+
+/* Responsive Adjustments (Optional) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2.4rem;
+    }
+    #word-display {
+        font-size: 1.6rem;
+        letter-spacing: 0.4em;
+    }
+    .success-header, .tomorrow-header {
+        font-size: 2.5rem;
+    }
+    #guess-container {
+        flex-direction: column; /* Stack input and button */
+        gap: 8px;
+    }
+    #guess-input {
+        margin-right: 0;
+    }
+}
+
+.otp-container {
+    display: flex;
+    flex-direction: row; /* Ensure horizontal layout */
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.otp-input {
+    width: 40px; /* Fixed width */
+    height: 40px; /* Fixed height */
+    min-width: 40px; /* Prevent stretching */
+    max-width: 28px; /* Prevent stretching */
+    border: 1px solid #CED4DA;
+    text-align: center;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    padding: 0; /* Remove padding */
+    box-sizing: border-box; /* Include border in width calculation */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block; /* Ensure inline display */
+    flex: 0 0 auto; /* Prevent flex stretching */
+}
+
+.otp-input:focus {
+    border-color: #A6D7E8;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(166, 215, 232, 0.5);
+}
+
+.verify-button {
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    background-color: #28A745; /* Green color matching your design */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.verify-button:hover {
+    background-color: #218838;
+}
+
+.verify-button:disabled {
+    background-color: #ADB5BD;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .otp-container{
+        flex-wrap: wrap;
+    }
+    .otp-input {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        max-width: 36px;
+        font-size: 1.25rem;
+    }
+}
+.explanation-button {
+    width: 100%;
+    padding: 14px; /* Slightly larger buttons */
+    margin: 8px 0px;
+    background-color: #28A745; 
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    text-decoration: none; /*Remove underline from link
+    /* display: inline-block; Allow padding on link */
+}
+.exp-text{
+    color: white;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+
+.explanation-button:hover {
+    background-color: #1e7e34; /* Slightly darker on hover */
+    text-decoration: none; /* Ensure no underline appears on hover */
+    color: white; /* Keep text white on hover */
+}
+
+.player-stats {
+    text-align: center;
+    margin: 15px 0;
+    font-weight: 600;
+    color: #4a4a4a;
+    font-size: 1.1rem;
+    padding: 8px 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Inline instructions */
+.instructions {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: .95rem;
+    color: #495057;
+    text-align: center;
+    line-height: 1.45;
+    margin: 10px 0 18px;
+    position: relative;         /* for the ? button */
+}
+
+/* Small “?” icon-button */
+.help-button {
+    display: inline-block;
+    margin-left: .4rem;
+    width: 20px;
+    height: 20px;
+    font-size: .9rem;
+    line-height: 18px;
+    border: 1px solid #ADB5BD;
+    border-radius: 50%;
+    background: #fff;
+    color: #495057;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+}
+.help-button:hover { background: #E9ECEF; }
+.help-button:focus { outline: none; box-shadow: 0 0 0 2px rgba(166,215,232,.6); }
+
+/* ----------  Modal ---------- */
+.modal {
+    display: none;              /* toggled by JS */
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(2px);
+    z-index: 1000;
+}
+
+.modal[open] { display: flex; }
+
+.modal-content {
+    background: #ffffff;
+    margin: auto;
+    padding: 28px 32px;
+    max-width: 460px;
+    width: calc(100% - 40px);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    font-family: 'Instrument Sans', sans-serif;
+    color: #343A40;
+}
+.modal-content h2 {
+    font-family: 'Playwrite US Trad', cursive;
+    font-size: 2rem;
+    margin-top: 0;
+    margin-bottom: .5rem;
+}
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #6C757D;
+    cursor: pointer;
+}
+.modal-close:hover { color: #343A40; }
+
+.answer-line {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #495057;
+    text-align: center;
+    margin: 14px 0 24px;      /* consistent spacing above / below */
+    /* letter-spacing: 0.03em; */
+}
+/* .answer-text {
+    text-transform: uppercase; */
+/* } */
+
+/* Tighter “Maybe tomorrow?” headline */
+.tomorrow-header {
+    line-height: 1.05;        /* pulls the two lines closer */
+    margin: 0 0 18px;         /* trims excess white-space */
+}

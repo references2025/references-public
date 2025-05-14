@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>References Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>References</h1>
+        </header>
+
+        <main id="game-container" data-game-id="{{ .GameID }}">
+            <div id="word-display" style="display: none;">{{ .MaskedWord }}</div>
+            <p id="game-instructions" class="instructions">
+                Guess the word from 4&nbsp;genre-spanning references, each tied to the same answer through fun trivia!<br>
+                <!-- <button id="help-button" class="help-button" aria-label="How&nbsp;to&nbsp;play">?</button> -->
+            </p>
+            <div id="game-status">
+                <div class="status-item">Guesses left: <span id="guesses-left">4</span></div>
+                <div class="status-item">Hints used: <span id="hints-used">0</span></div>
+            </div>
+
+            <div id="guess-container">
+                <input type="text" id="guess-input" name="guess" placeholder="Type your guess here" style="display: none;">
+                <button id="guess-button" style="display: none;">Guess!</button>
+            </div>
+
+            <div id="game-results"></div>
+
+            <div id="hints-container">
+                {{ range .Categories }}
+                <div class="hint-box" data-category="{{ . }}">
+                    <div class="hint-category">{{ . }}</div>
+                    <div class="hint-content"></div>
+                </div>
+                {{ end }}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const baseGameUrl = {{ .BaseGameURL }};
+    </script>
+    <script src="/static/js/app.js"></script>
+    <!-- <div id="help-modal" class="modal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-labelledby="help-title">
+          <button class="modal-close" aria-label="Close dialog">&times;</button>
+          <h2 id="help-title">How to play References</h2>
+          <p>
+            • Tap any card to reveal its clue<br>
+            • Type out your guess in the letter boxes, then press&nbsp;<em>Guess!</em><br>
+            • Fewer hints and guesses&nbsp;=&nbsp;more bragging rights&nbsp;:)
+          </p>
+        </div>
+      </div> -->
+</body>
+</html>

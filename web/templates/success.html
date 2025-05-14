@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>References - Solved!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>References</h1>
+        </header>
+
+        <!-- Specific container for success content -->
+        <div class="result-inner-container">
+        <main class="success-content">
+            
+                <h2 class="success-header">Solved!</h2>
+                <div class="success-message">You got it in {{ .Guesses }} {{ if eq .Guesses 1 }}guess{{ else }}guesses{{ end }} with {{ .Hints }} {{ if eq .Hints 1 }}reference{{ else }}references{{ end }}!</div>
+                <!-- Display Word (or maybe "References 🎉" as per mock?) -->
+                <p class="answer-line">Answer:&nbsp;<span class="answer-text">{{ .Word }}</span></p>
+
+                <div class="summary-title">Gameplay Summary</div>
+                <div class="game-id-display">Game #{{ .GameNumber }} | {{ .FormattedDate }}</div>
+
+
+                <!-- Area for the share message (populated by JS) -->
+                <div class="share-summary-display" id="share-summary"></div>  
+        </main>
+        </div>
+
+        <button class="share-button" id="share-button">Share your results</button>
+        <!-- Add disabled attribute if needed -->
+        <!-- <button class="explanation-button" disabled>View the explanation tomorrow!</button>-->
+        <button class="explanation-button" target="_blank" rel="noopener noreferrer">
+            <a class = "exp-text" href="https://www.instagram.com/referencesgame">View the explanation tomorrow! </a>
+        </button>
+    </div>
+
+    <script>
+        // Inject pre-marshalled JSON data directly
+        const allCategoryEmojis = {{ .CategoryEmojis }};
+        const gameId = {{ .GameIDJS }};
+        const guessesTaken = {{ .Guesses }};
+        const hintsCountFromURL = {{ .Hints }}; // Note: JS calculates actual count from storage
+        const gameWord = {{ .WordJS }};
+        const baseUrl = {{ .BaseGameURLJS }};
+        const shareUrl = `https://${baseUrl}`;
+        const gameNumber = {{ .GameNumber }};
+        const formattedDate ={{.FormattedDate}};
+        
+
+        // --- JS for Share Summary Generation and Copy/Share ---
+        // (Keep the existing JS logic from the previous step)
+        function generateHintSummary(gameEvents) {
+            let summary = '';
+            for (const event of gameEvents) {
+                if (event.type === 'guess' && !event.correct) {
+                    summary += '❌ ';
+                } else if (event.type === 'hint') {
+                    const emoji = allCategoryEmojis[event.value] || '❓';
+                    summary += emoji + ' ';
+                } else if (event.type === 'guess' && event.correct) {
+                    summary += '✅ ';
+                }
+            }
+            
+            return summary.trim();
+        }
+        // Load game events from localStorage
+        let gameEvents = [];
+        try {
+            const eventsKey = `references-events-${gameId}`;
+            const storedEvents = localStorage.getItem(eventsKey);
+            if (storedEvents) {
+                gameEvents = JSON.parse(storedEvents);
+            }
+        } catch (e) {
+            console.error("Error reading game events:", e);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const shareButton = document.getElementById('share-button');
+            const shareSummaryElem = document.getElementById('share-summary');
+            const hintsStateKey = `references-hints-${gameId}`;
+            const playerIDKey = 'references-player-id';
+            const playerID = localStorage.getItem(playerIDKey);
+            
+            if (!playerID) {
+                console.warn("No player ID found in localStorage");
+                return;
+            }
+
+            let usedHintsData = {};
+            try {
+                 const storedHints = localStorage.getItem(hintsStateKey);
+                 if (storedHints) {
+                    usedHintsData = JSON.parse(storedHints);
+                 }
+                 if (typeof usedHintsData !== 'object' || usedHintsData === null) {
+                     usedHintsData = {}; // Fallback to empty object
+                 }
+            } catch (e) {
+                console.error("Error reading hints state for sharing:", e);
+                usedHintsData = {};
+            }
+
+            const hintSummaryLine = generateHintSummary(gameEvents);
+
+            if (shareSummaryElem) {
+                // Display the summary line in the designated area
+                shareSummaryElem.textContent = hintSummaryLine || 'No hint data found.'; // Provide fallback text
+            } else {
+                console.warn("Share summary display element not found.");
+            }
+
+            const actualHintsUsedCount = Object.keys(usedHintsData).length;
+            const originalShareText = `References | Game ${gameNumber} | ${formattedDate}\nSolved in ${guessesTaken} ${guessesTaken === 1 ? 'guess' : 'guesses'}!\n\n${hintSummaryLine}\n\nPlay at ${shareUrl}`;
+            let shareText = originalShareText
+            // const summaryElem = document.querySelector('.summary-title');
+            // if (summaryElem) {
+            //     const statsElem = document.createElement('div');
+            //     statsElem.id = 'player-stats';
+            //     statsElem.className = 'player-stats';
+            //     statsElem.textContent = 'Loading player statistics...';
+                
+            //     summaryElem.parentNode.insertBefore(statsElem, summaryElem.nextSibling);
+                
+            //     fetch(`/stats?gameId=${encodeURIComponent(gameId)}&playerId=${encodeURIComponent(playerID)}`)
+            //         .then(response => {
+            //             if (!response.ok) {
+            //                 throw new Error(`HTTP error ${response.status}`);
+            //             }
+            //             return response.json();
+            //         })
+            //         .then(stats => {
+            //             if (stats.playerRank && stats.playersSolved) {
+            //                 statsElem.textContent = `You were solver #${stats.playerRank} out of ${stats.playersSolved} who solved today's puzzle!`;
+                            
+            //                 shareText = `${originalShareText}\n\nI was solver #${stats.playerRank} out of ${stats.playersSolved} who solved today's puzzle!`;
+            //             } else {
+            //                 statsElem.textContent = '';
+            //             }
+            //         })
+            //         .catch(error => {
+            //             console.error('Error fetching player stats:', error);
+            //             statsElem.textContent = '';
+            //         });
+            // }
+
+            if (shareButton) {
+                 shareButton.addEventListener('click', function() {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: 'References Game Results',
+                            text: shareText,
+                        }).then(() => console.log('Shared successfully'))
+                          .catch(err => {
+                            console.error('Share failed:', err);
+                            copyToClipboard(shareText); // Fallback
+                        });
+                    } else {
+                        copyToClipboard(shareText); // Fallback
+                    }
+                });
+            }
+        });
+
+        function copyToClipboard(text) { /* ... keep implementation ... */
+             if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Results copied to clipboard!');
+                }).catch(err => {
+                    console.error('Clipboard write failed:', err);
+                    fallbackCopyToClipboard(text);
+                });
+            } else {
+                 fallbackCopyToClipboard(text);
+            }
+        }
+        function fallbackCopyToClipboard(text) { /* ... keep implementation ... */
+             const textarea = document.createElement('textarea');
+             textarea.value = text;
+             textarea.style.position = 'fixed';
+             textarea.style.opacity = 0;
+             document.body.appendChild(textarea);
+             textarea.select();
+             try {
+                 const successful = document.execCommand('copy');
+                 alert(successful ? 'Results copied to clipboard!' : 'Failed to copy results.');
+             } catch (err) {
+                 console.error('execCommand copy failed:', err);
+                 alert('Failed to copy results.');
+             }
+             document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
